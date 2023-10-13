@@ -136,4 +136,73 @@ public class RingBufferTest {
         Iterator<Integer> iter = ringBuffer.iterator();
         assertThrows(UnsupportedOperationException.class, () -> iter.remove());
     }
+
+    @Test
+    public void testSetCapacityIncrease() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(2);
+        ringBuffer.enqueue(1);
+        ringBuffer.setCapacity(5);
+
+        assertEquals(5, ringBuffer.capacity());
+        assertEquals(1, ringBuffer.peek());
+    }
+
+    @Test
+    public void testSetCapacityIncreaseOfFullBufferPlusOne() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(2);
+        ringBuffer.enqueue(1);
+        ringBuffer.enqueue(2);
+        ringBuffer.enqueue(3);
+
+        assertTrue(ringBuffer.isFull());
+
+        ringBuffer.setCapacity(5);
+
+        assertFalse(ringBuffer.isFull());
+        assertEquals(5, ringBuffer.capacity());
+        assertEquals(2, ringBuffer.dequeue());
+        assertEquals(3, ringBuffer.dequeue());
+    }
+
+    @Test
+    public void testSetCapacityIncreaseOfEmptyBuffer() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(2);
+        ringBuffer.setCapacity(5);
+
+        assertTrue(ringBuffer.isEmpty());
+        assertEquals(5, ringBuffer.capacity());
+    }
+
+    @Test
+    public void testSetCapacityDecrease() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(7);
+        ringBuffer.enqueue(1);
+        ringBuffer.enqueue(2);
+
+        ringBuffer.setCapacity(3);
+
+        assertEquals(3, ringBuffer.capacity());
+        assertEquals(1, ringBuffer.dequeue());
+        assertEquals(2, ringBuffer.dequeue());
+    }
+
+    @Test
+    public void testSetCapacityDecreaseOfFullBuffer() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(3);
+        ringBuffer.enqueue(1);
+        ringBuffer.enqueue(2);
+        ringBuffer.enqueue(3);
+
+        Exception exc = assertThrows(RuntimeException.class, () -> ringBuffer.setCapacity(2));
+        assertEquals("Given capacity smaller than number of elements hold by the buffer currently.", exc.getMessage());
+    }
+
+    @Test
+    public void testSetCapacityDecreaseOfEmptyBuffer() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(5);
+        ringBuffer.setCapacity(2);
+        
+        assertTrue(ringBuffer.isEmpty());
+        assertEquals(2, ringBuffer.capacity());
+    }
 }

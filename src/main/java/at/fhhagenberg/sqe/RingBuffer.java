@@ -57,6 +57,31 @@ public class RingBuffer<Item> implements Iterable<Item> {
 	}
 
 	/**
+	 * Changes the capacity of the buffer to the given new size.
+	 * If the new capacity is smaller than then number of elements hold by
+	 * the buffer currently an exception it thrown.
+	 * @param newCapacity The new capacity of the buffer. 
+	 */
+	@SuppressWarnings("unchecked")
+	public void setCapacity(int newCapacity) {
+		if (newCapacity < N) {
+			throw new RuntimeException("Given capacity smaller than number of elements hold by the buffer currently.");
+		}
+		Item[] newA = (Item[]) new Object[newCapacity];
+		int newN = N;
+
+		int idx = 0;
+		while(!isEmpty()) {
+			newA[idx] = dequeue();
+			idx = (idx + 1) % newA.length;
+		}
+		first = 0;
+		last = idx;
+		N = newN;
+		a = newA;
+	}
+
+	/**
 	 * Appends the specified element to the end of the buffer. If the buffer has already 
 	 * reached its capacity, appending overwrites the first element in the buffer.
 	 * @param item to be appended to the buffer.
