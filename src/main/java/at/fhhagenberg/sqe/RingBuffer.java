@@ -105,7 +105,7 @@ public class RingBuffer<Item> implements Iterable<Item> {
 	}
 
 	private class RingBufferIterator implements Iterator<Item> {
-		private int i = 0;
+		private int i = first;
 		
 		/** @inheritDoc */
 		public boolean hasNext() {
@@ -122,7 +122,9 @@ public class RingBuffer<Item> implements Iterable<Item> {
 		public Item next() {
 			if (!hasNext())
 				throw new NoSuchElementException();
-			return a[i++];
+			Item item = a[i];
+			i = (i + 1 ) % a.length; // warp-around
+			return item;
 		}
 	}
 
