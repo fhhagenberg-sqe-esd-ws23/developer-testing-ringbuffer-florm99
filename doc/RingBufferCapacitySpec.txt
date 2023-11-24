@@ -18,3 +18,20 @@ Specification of Equivalence Partitions and Boundary Values for RingBuffer(int c
 [1000000000 .. 2147483647] -> this partition should have the same result as the previous one, but memory issues might come up
                             Thus we skip testing this partition
 
+(3) setCapacity matrix
+
+    size     | IntMin .. -1 |   0 .. 3   | 4 .. IntMax | -> capacity
+========================================================
+IntMin .. -1 | invalid      | invalid    | invalid     | 
+    0 .. 3   | invalid      | valid if * | valid       | 
+4 .. IntMax  | invalid      | invalid    | valid if *  |
+
+*(size <= capacity)
+
+Further notes:
+- negative size is not possible
+- if condition is violated, RuntimeException is thrown by setCapacity
+- partition 4 .. IntMax not relevant for testing, because same behavior as 0 .. 3
+- thus size 0..3 and capacity IntMin..-1 and 0..3 are relevant matrix entries
+
+

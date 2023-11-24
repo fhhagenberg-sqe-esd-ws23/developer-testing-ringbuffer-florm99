@@ -121,4 +121,48 @@ public class RingBufferPartitionsTest {
         assertTrue(ringBuffer.isEmpty());
         assertFalse(ringBuffer.isFull());
     }
+
+    @Test
+    public void testSetCapacityNegativeEmpty() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(5);
+
+        assertEquals(0, ringBuffer.size());
+        assertThrows(RuntimeException.class, () -> ringBuffer.setCapacity(-1));
+        assertEquals(5, ringBuffer.capacity());
+    }
+
+    @Test
+    public void testSetCapacityNegativeNotEmpty() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(5);
+
+        ringBuffer.enqueue(1);
+        ringBuffer.enqueue(2);
+        ringBuffer.enqueue(3);
+
+        assertEquals(3, ringBuffer.size());
+        assertThrows(RuntimeException.class, () -> ringBuffer.setCapacity(-1));
+        assertEquals(5, ringBuffer.capacity());
+    }
+
+    @Test
+    public void testSetCapacitySmallerSize() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(5);
+
+        ringBuffer.enqueue(1);
+        ringBuffer.enqueue(2);
+        ringBuffer.enqueue(3);
+
+        assertEquals(3, ringBuffer.size());
+        assertThrows(RuntimeException.class, () -> ringBuffer.setCapacity(0));
+        assertEquals(5, ringBuffer.capacity());
+    }
+
+    @Test
+    public void testSetCapacityLargerSize() {
+        RingBuffer<Integer> ringBuffer = new RingBuffer<>(5);
+
+        assertEquals(0, ringBuffer.size());
+        ringBuffer.setCapacity(3);
+        assertEquals(3, ringBuffer.capacity());
+    }
 }
