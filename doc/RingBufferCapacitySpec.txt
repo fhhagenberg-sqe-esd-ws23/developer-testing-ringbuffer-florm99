@@ -1,0 +1,20 @@
+Specification of Equivalence Partitions and Boundary Values for RingBuffer(int capacity)
+
+(1) Valid and Invalid Equivalence Partitions
+
+// todo: list all valid and invalid partitions for the parameter capacity in form of ranges of int values 
+
+[1 .. 2147483647] -> valid (int 32 bit max value, memory issues might come up with very high numbers)
+[0 .. 0] -> valid (useless, but valid since capacity can be changed with the set method)
+[-1 .. -2147483648] -> invalid (int 32 bit min value)
+
+
+(2) Refined Equivalence Partitions for Valid Partitions
+
+// todo: list all partitions exhibiting equivalent behavior within the partition of valid values
+[0 .. 0] -> empty and full at the same time, no push and pop possible
+[1 .. 1] -> initial state is empty, full after one push, empty after one pop
+[2 .. 1000000000] -> initial state empty, filled after one push, full after 'capacity' number of pushes
+[1000000000 .. 2147483647] -> this partition should have the same result as the previous one, but memory issues might come up
+                            Thus we skip testing this partition
+
