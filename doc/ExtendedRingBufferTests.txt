@@ -1,0 +1,13 @@
+setCapacity tests Transitions WITHOUT negative function parameter n:
+
+1. (initial) -init-> (empty) -enqueue-> (filled) -setCapacity-> (full)
+2. (initial) -init-> (empty) -enqueue-> (filled) -setCapacity-> (filled)
+3. (initial) -init-> (empty) -enqueue-> (filled) -enqueue-> (full) -setCapacity-> (full)
+4. (initial) -init-> (empty) -enqueue-> (filled) -enqueue-> (full) -setCapacity-> (filled)
+5. (initial) -init-> (empty) -enqueue-> (filled) -setCapacity-> (error)
+6. (initial) -init-> (empty) -enqueue-> (filled) -enqueue-> (full) -setCapacity-> (error)
+
+tests for negative n:
+7. (initial) -init-> (empty) -setCapacity-> (error)
+8. (initial) -init-> (empty) -enqueue-> (filled) -setCapacity-> (error)
+9. (initial) -init-> (empty) -enqueue-> (full) -setCapacity-> (error)
